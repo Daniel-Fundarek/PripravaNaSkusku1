@@ -1,5 +1,6 @@
 package sk.stuba.fei.uim.oop;
 
+import lombok.Getter;
 import lombok.Setter;
 import sk.stuba.fei.uim.oop.Shapes.Line;
 import sk.stuba.fei.uim.oop.Shapes.Plus;
@@ -18,6 +19,8 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
     Shape actualShape;
     @Setter
     private Color color = Color.RED;
+    @Getter@Setter
+    private Boolean paintOnCan = true;
     @Setter
     private String shape ="Line";
     int x =0, y= 0;
@@ -33,7 +36,40 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if(!paintOnCan){
+            int xxx = e.getX();
+            int yyy = e.getY();
+            System.out.println("x: "+ xxx +" y: " + yyy);
+            for (int i = obj.size()-1;i>=0;i--){
+                int x1= obj.get(i).getX();
+                int x2= obj.get(i).getX2();
+                int y1 = obj.get(i).getY();
+                int y2 = obj.get(i).getX();
+                int width = abs(x1-x2);
+                int length = abs(y1-y2);
 
+
+                System.out.println("x1  " +x1+" x2 "+x2 + " y1 "+ y1 + " y2 "+ y2);
+                if((x1+width/3) <= xxx && xxx<= (x2-width/3) && y1 <= yyy && y2>= yyy){
+                    obj.get(i).setColor(color);
+                    break;
+                }
+                if((y1+length/3) <= yyy && yyy<= (y2-length/3) && x1 <= xxx && x2>= xxx){
+                    obj.get(i).setColor(color);
+                    break;
+                }
+
+                /*
+                if(obj.get(i).getX()< xxx && xxx< obj.get(i).getX2()){
+                    if(obj.get(i).getY()< yyy && yyy< obj.get(i).getY2()){
+                        obj.get(i).setColor(color);
+
+                    break;
+                    }
+                }*/
+            }
+            repaint();
+        }
     }
 
     @Override
@@ -41,24 +77,26 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
 
         x = e.getX();
         y = e.getY();
+        if(paintOnCan) {
+            if (shape.equals("Line")) {
+                actualShape = new Line(x, y, x + 1, y + 1, color);
 
-        if(shape.equals("Line") ) {
-            actualShape = new Line(x, y, x+1, y+1, color);
 
+            } else {
+                actualShape = new Plus(x, y, x + 1, y + 1, color);
 
-        }
-        else{
-            actualShape = new Plus(x, y, x+1, y+1, color);
-
+            }
         }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        obj.add(actualShape);
-        repaint();
-        actualShape = null;
+        if(paintOnCan) {
+            obj.add(actualShape);
+            repaint();
+            actualShape = null;
+        }
     }
 
     @Override

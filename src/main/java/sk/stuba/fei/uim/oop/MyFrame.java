@@ -50,6 +50,9 @@ public class MyFrame extends JFrame implements ActionListener, ItemListener {
 
         this.add(panel);
 
+        JButton stateButton = new JButton("Paint/click");
+        stateButton.addActionListener(this);
+        this.add(stateButton,BorderLayout.SOUTH);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(550, 550);
         this.setVisible(true);
@@ -61,9 +64,15 @@ public class MyFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        shape = e.getActionCommand();
-        System.out.println(shape);
-        canvas.setShape(shape);
+        if(e.getActionCommand().equals("Paint/click")){
+            canvas.setPaintOnCan(!canvas.getPaintOnCan());
+            System.out.println(canvas.getPaintOnCan());
+        }
+        else {
+            shape = e.getActionCommand();
+            System.out.println(shape);
+            canvas.setShape(shape);
+        }
     }
 
     @SneakyThrows
