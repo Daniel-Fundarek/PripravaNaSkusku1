@@ -1,5 +1,8 @@
 package sk.stuba.fei.uim.oop;
 
+import lombok.Setter;
+import sk.stuba.fei.uim.oop.Shapes.Line;
+import sk.stuba.fei.uim.oop.Shapes.Plus;
 import sk.stuba.fei.uim.oop.Shapes.Shape;
 
 import java.awt.*;
@@ -8,16 +11,25 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
+import static java.lang.Math.abs;
+
 public class MyCanvas extends Canvas implements MouseMotionListener, MouseListener {
     public ArrayList<Shape> obj = new ArrayList<>();
-    Shape actualRect;
+    Shape actualShape;
+    @Setter
+    private Color color = Color.RED;
+    @Setter
+    private String shape ="Line";
     int x =0, y= 0;
 
     public MyCanvas() {
         super();
         addMouseListener(this);
         addMouseMotionListener(this);
+
     }
+
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -26,17 +38,27 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
 
     @Override
     public void mousePressed(MouseEvent e) {
+
         x = e.getX();
         y = e.getY();
-        actualRect = new MyRectangle(x,y,1,1, Color.GREEN);
+
+        if(shape.equals("Line") ) {
+            actualShape = new Line(x, y, x+1, y+1, color);
+
+
+        }
+        else{
+            actualShape = new Plus(x, y, x+1, y+1, color);
+
+        }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        obj.add(actualRect);
+        obj.add(actualShape);
         repaint();
-        actualRect = null;
+        actualShape = null;
     }
 
     @Override
@@ -51,29 +73,40 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(actualRect !=null){
+        if(actualShape !=null){
             int dx = e.getX();
             int dy = e.getY();
-            if (dx > this.x && dy < this.y){
-                actualRect.y = dy;
-                actualRect.height = this.y - dy;
-                actualRect.width =  dx - this.x;
+            if(shape.equals("Plus")) {
+                int width = abs(dx-this.x);
+                int length = abs(dy-this.y);
+                if (width<length){
+                    length = width;
+                }
+                if (dx > this.x && dy < this.y) {
 
+                    actualShape.setX2(this.x+length);
+                    actualShape.setY2(this.y);
+                    actualShape.setX(this.x);
+                    actualShape.setY(this.y-length);
+
+                } else if (dx < this.x && dy < this.y) {
+                    actualShape.setX(this.x-length);
+                    actualShape.setY(this.y-length);
+                    actualShape.setX2(this.x);
+                    actualShape.setY2(this.y);
+                } else if (dx < this.x && dy > this.y) {
+                    actualShape.setX2(this.x);
+                    actualShape.setY2(this.y+length);
+                    actualShape.setX(this.x-length);
+                    actualShape.setY(this.y);
+                } else {
+                    actualShape.setX2(dx);
+                    actualShape.setY2(dy);
+                }
             }
-            else if(dx < this.x && dy < this.y){
-                actualRect.x = dx;
-                actualRect.y = dy;
-                actualRect.width = this.x - dx;
-                actualRect.height = this.y - dy;
-            }
-            else if(dx < this.x && dy > this.y) {
-                actualRect.x = dx;
-                actualRect.width = this.x - dx;
-                actualRect.height =  dy - this.y;
-            }
-            else {
-                actualRect.width = dx - this.x;
-                actualRect.height = dy - this.y;
+            else{
+                actualShape.setX2(dx);
+                actualShape.setY2(dy);
             }
             repaint();
         }
@@ -87,11 +120,11 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
 
     @Override
     public void paint(Graphics g) {
-        for (MyRectangle a: obj){
-            a.paintRect(g);
+        for (Shape a: obj){
+            a.paintShape(g);
         }
-        if(actualRect != null){
-            actualRect.paintRect(g);
+        if(actualShape != null){
+            actualShape.paintShape(g);
         }
     }
 }

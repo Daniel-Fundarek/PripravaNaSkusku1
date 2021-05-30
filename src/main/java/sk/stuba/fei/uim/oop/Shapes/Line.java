@@ -11,11 +11,12 @@ public class Line extends Shape{
 
     public Line(int x, int y, int width, int height, Color color) {
         super(x, y, width, height, color);
+
     }
 
     @Override
-    void paintShape(Graphics g) {
-        g.setColor(color);
-        g.drawLine(x,y,height,width);
+    public void paintShape(Graphics g) {
+        g.setColor(getColor());
+        g.drawLine(getX(),getY(), getX2(), getY2());
     }
 }

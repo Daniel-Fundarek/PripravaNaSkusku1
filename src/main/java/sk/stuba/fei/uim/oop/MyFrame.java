@@ -11,7 +11,8 @@ import java.awt.event.ItemListener;
 import java.lang.reflect.Field;
 
 public class MyFrame extends JFrame implements ActionListener, ItemListener {
-    Color color;
+    private Color color;
+    private String shape = "";
     JLabel label = new JLabel();
     MyCanvas canvas = new MyCanvas();
     JPanel panel = new JPanel();
@@ -31,14 +32,16 @@ public class MyFrame extends JFrame implements ActionListener, ItemListener {
         choice.add("YELLOW");
         choice.add("GREEN");
         choice.add("BLACK");
+        choice.add("PINK");
         choice.addItemListener(this);
 
         var buttonPanel = new JPanel();
         buttonPanel.setLayout( new GridLayout(1,4));
-        lineButton.setName("1");
         buttonPanel.add(lineButton);
         buttonPanel.add(plusButton);
         buttonPanel.add(label);
+        label.setForeground(Color.RED);
+        label.setText("RED");
         buttonPanel.add(choice);
         lineButton.addActionListener(this);
         plusButton.addActionListener(this);
@@ -58,16 +61,9 @@ public class MyFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        var action = e.getActionCommand();
-        System.out.println(action);
-        if (action == " Plus"){
-            // plus v canvase
-        }
-        else{
-            // line v canvase
-        }
-
-
+        shape = e.getActionCommand();
+        System.out.println(shape);
+        canvas.setShape(shape);
     }
 
     @SneakyThrows
@@ -76,6 +72,7 @@ public class MyFrame extends JFrame implements ActionListener, ItemListener {
         System.out.println(e.getItem());
         Field field = Class.forName("java.awt.Color").getField((String) e.getItem());
         color = (Color)field.get(null);
+        canvas.setColor(color);
         System.out.println(color);
         label.setForeground(color);
         label.setText((String) e.getItem());
