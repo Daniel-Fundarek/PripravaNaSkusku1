@@ -44,7 +44,6 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
                 if(obj.get(i).getX()< xxx && xxx< obj.get(i).getX2()){
                     if(obj.get(i).getY()< yyy && yyy< obj.get(i).getY2()){
                         obj.get(i).setColor(color);
-
                     break;
                     }
                 }
