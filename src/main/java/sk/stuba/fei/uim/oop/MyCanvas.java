@@ -39,7 +39,6 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
         if(!paintOnCan){
             int xxx = e.getX();
             int yyy = e.getY();
-            System.out.println("x: "+ xxx +" y: " + yyy);
             for (int i = obj.size()-1;i>=0;i--){
                 if(obj.get(i).getX()< xxx && xxx< obj.get(i).getX2()){
                     if(obj.get(i).getY()< yyy && yyy< obj.get(i).getY2()){
