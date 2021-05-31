@@ -20,4 +20,5 @@ abstract public class Shape  {
     }
 
     public abstract void paintShape(Graphics g);
+    public abstract boolean isCursorInside(int x , int y);
 }

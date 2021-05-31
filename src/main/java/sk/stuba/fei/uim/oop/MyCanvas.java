@@ -40,11 +40,10 @@ public class MyCanvas extends Canvas implements MouseMotionListener, MouseListen
             int xxx = e.getX();
             int yyy = e.getY();
             for (int i = obj.size()-1;i>=0;i--){
-                if(obj.get(i).getX()< xxx && xxx< obj.get(i).getX2()){
-                    if(obj.get(i).getY()< yyy && yyy< obj.get(i).getY2()){
-                        obj.get(i).setColor(color);
+
+                if(obj.get(i).isCursorInside(xxx,yyy)) {
+                    obj.get(i).setColor(color);
                     break;
-                    }
                 }
             }
             repaint();
